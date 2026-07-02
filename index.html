@@ -579,14 +579,19 @@ function doShare(type){
 }
 
 /* ===== ANALYTICS ===== */
-const GSHEET_URL=''; // ← วาง Apps Script URL ที่นี่
+const GSHEET_URL = 'https://script.google.com/macros/s/AKfycbxuoxKRL0jC2oOnLFLBPhSiZnejsgc-QwU0NDY2ssFQBxzNy2lNIYhuhL7oHlDCJik_GA/exec';
 function getDeviceId(){let id=localStorage.getItem('ms_uid');if(!id){id='uid_'+Date.now()+'_'+Math.random().toString(36).slice(2);localStorage.setItem('ms_uid',id);}return id;}
 function getStats(){return JSON.parse(localStorage.getItem('ms_stats')||'{"players":[],"repeats":0,"storyShares":0,"gateClicks":0}');}
 function saveStats(s){localStorage.setItem('ms_stats',JSON.stringify(s));}
 function trackVisit(){const s=getStats(),uid=getDeviceId();if(!s.players.includes(uid)){s.players.push(uid);}else{s.repeats=(s.repeats||0)+1;}saveStats(s);_send({event:'visit',uid});}
 function trackStoryShare(){const s=getStats();s.storyShares=(s.storyShares||0)+1;saveStats(s);_send({event:'story_share',uid:getDeviceId()});}
 function trackGate(){const s=getStats();s.gateClicks=(s.gateClicks||0)+1;saveStats(s);_send({event:'gate_click',uid:getDeviceId()});}
-function _send(p){if(!GSHEET_URL)return;fetch(GSHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).catch(()=>{});}
+function _send(p) {
+  if (!GSHEET_URL) return;
+  // เปลี่ยนเป็นส่งแบบ GET โดยส่งข้อมูลเป็น Parameter ไปใน URL ครับ
+  const url = GSHEET_URL + "?action=" + p.event + "&uid=" + (p.uid || "");
+  fetch(url, { mode: 'no-cors' }).catch(()=>{});
+}
 function renderInsights(){
   const s=getStats();
   const metrics=[
@@ -722,6 +727,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   if(location.hash==='#insights'){renderInsights();goScreen('insights');}
 });
+  trackVisit();
 </script>
 </body>
 </html>
