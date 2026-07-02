@@ -460,7 +460,10 @@ function showResult(){
   goScreen('result');
 }
 
-function restartQuiz(){goScreen('open');}
+function restartQuiz() {
+  _send({event: 'replay', uid: getDeviceId()}); // เพิ่มบรรทัดนี้ไปแจ้ง Google Sheet
+  goScreen('open'); // โค้ดเดิมของดาริญ
+}
 
 /* ===== TOAST ===== */
 function showToast(msg,dur=2800){
@@ -583,7 +586,16 @@ const GSHEET_URL = 'https://script.google.com/macros/s/AKfycbxuoxKRL0jC2oOnLFLBP
 function getDeviceId(){let id=localStorage.getItem('ms_uid');if(!id){id='uid_'+Date.now()+'_'+Math.random().toString(36).slice(2);localStorage.setItem('ms_uid',id);}return id;}
 function getStats(){return JSON.parse(localStorage.getItem('ms_stats')||'{"players":[],"repeats":0,"storyShares":0,"gateClicks":0}');}
 function saveStats(s){localStorage.setItem('ms_stats',JSON.stringify(s));}
-function trackVisit(){const s=getStats(),uid=getDeviceId();if(!s.players.includes(uid)){s.players.push(uid);}else{s.repeats=(s.repeats||0)+1;}saveStats(s);_send({event:'visit',uid});}
+function trackVisit() {
+  // เช็กว่าเคยบันทึก visit ไปหรือยังในเครื่องนี้
+  if (localStorage.getItem('visited')) return; 
+  
+  const uid = getDeviceId();
+  _send({event: 'visit', uid});
+  
+  // บันทึกว่าเข้าเว็บแล้ว เพื่อไม่ให้ส่งซ้ำ
+  localStorage.setItem('visited', 'true');
+}
 function trackStoryShare(){const s=getStats();s.storyShares=(s.storyShares||0)+1;saveStats(s);_send({event:'story_share',uid:getDeviceId()});}
 function trackGate(){const s=getStats();s.gateClicks=(s.gateClicks||0)+1;saveStats(s);_send({event:'gate_click',uid:getDeviceId()});}
 function _send(p) {
