@@ -474,48 +474,58 @@ function shareToStory(){
   trackStoryShare();
   showToast('⏳ กำลังสร้างรูป...',1800);
 
-  // Populate the dedicated story card with current result
+  const card = document.getElementById('resultCard');
   const mImg = document.getElementById('resultMascotImg');
-  const sCard = document.getElementById('storyCard');
-  const sMascot = document.getElementById('storyMascotImg');
-  const sTitle = document.getElementById('storyTitle');
-  const sFaculty = document.getElementById('storyFaculty');
-  const sDesc = document.getElementById('storyDesc');
 
-  // Copy data from result to story card
-  sMascot.src = mImg.src;
-  sMascot.style.filter = mImg.style.filter || '';
-  sTitle.textContent = document.getElementById('rTitle').textContent;
-  sFaculty.textContent = document.getElementById('rFaculty').textContent;
-  sDesc.textContent = document.getElementById('rDesc').textContent.substring(0, 120) + '...';
+  // 1. Freeze the float animation so mascot is at natural top position
+  mImg.style.animation = 'none';
+  mImg.style.transform = 'translateY(0)';
+  // Also freeze the result-glow pulse if any
+  card.style.overflow = 'hidden';
 
-  // Temporarily bring card into DOM rendering (off-screen but renderable)
-  sCard.style.top = '-9999px';
-  sCard.style.left = '-9999px';
-  sCard.style.position = 'fixed';
+  // 2. Scroll result section into view from the very top
+  const resultSection = document.getElementById('screen-result');
+  const savedScroll = window.scrollY;
+  resultSection.scrollTop = 0;
+  window.scrollTo(0, resultSection.offsetTop);
 
   setTimeout(()=>{
-    html2canvas(sCard,{
-      backgroundColor:'#18103a',
-      scale:2,
-      useCORS:true,
-      logging:false,
-      allowTaint:true,
-      width:400,
-      height:711,
-      windowWidth:400,
-      windowHeight:711,
-    }).then(canvas=>{
-      canvas.toBlob(blob=>{
-        const file=new File([blob],'moresheet-result.png',{type:'image/png'});
-        if(navigator.canShare&&navigator.canShare({files:[file]})){
-          navigator.share({files:[file],title:'คณะที่ใช่ของฉัน!'}).then(()=>{
-            showToast('✅ แชร์สำเร็จ!');
-          }).catch(err=>{ if(err.name!=='AbortError') fallbackStory(canvas); });
+    // Get exact position of card relative to page
+    const rect = card.getBoundingClientRect();
+
+    html2canvas(card, {
+      backgroundColor: null,          // transparent — keep card's own bg
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      allowTaint: true,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0,
+    }).then(canvas => {
+      // Restore everything
+      mImg.style.animation = 'float 3.5s ease-in-out infinite';
+      mImg.style.transform = '';
+      card.style.overflow = '';
+      window.scrollTo(0, savedScroll);
+
+      canvas.toBlob(blob => {
+        const file = new File([blob],'moresheet-result.png',{type:'image/png'});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({files:[file], title:'คณะที่ใช่ของฉัน!'})
+            .then(()=> showToast('✅ แชร์สำเร็จ!'))
+            .catch(err=>{ if(err.name!=='AbortError') fallbackStory(canvas); });
         } else { fallbackStory(canvas); }
       },'image/png');
-    }).catch(()=>fallbackStory(null));
-  },250);
+    }).catch(()=>{
+      mImg.style.animation = 'float 3.5s ease-in-out infinite';
+      mImg.style.transform = '';
+      card.style.overflow = '';
+      window.scrollTo(0, savedScroll);
+      fallbackStory(null);
+    });
+  }, 200);
 }
 function fallbackStory(canvas){
   if(canvas){
