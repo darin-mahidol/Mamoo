@@ -8,6 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
+@font-face{
+  font-family:'Banburi';
+  src:url('banburi.woff2') format('woff2'),
+      url('banburi.ttf') format('truetype');
+  font-weight:normal;font-style:normal;
+}
 :root{
   --night:#18103a;--night2:#241659;--violet:#6E44CC;--lavender:#C6B6F2;
   --gold:#F4C24C;--mint:#6FDFB9;--peach:#FFB085;--paper:#FBF7FF;
@@ -37,7 +43,7 @@ body{
 .stage{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh;padding:24px 18px 80px;display:flex;flex-direction:column;}
 @media(min-width:720px){.stage{max-width:600px;padding:40px 24px 90px;}}
 
-.brand{text-align:center;font-size:11px;letter-spacing:.5em;color:var(--lavender);text-transform:uppercase;margin-bottom:14px;opacity:.7;font-family:'Prompt',sans-serif;}
+.brand{text-align:center;font-size:11px;letter-spacing:.5em;color:var(--lavender);text-transform:uppercase;margin-bottom:14px;opacity:.7;font-family:'Banburi','Mitr',sans-serif;font-size:13px;letter-spacing:.35em;}
 
 .card{background:var(--glass);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(8px);border-radius:24px;padding:24px 20px;box-shadow:0 18px 48px rgba(0,0,0,.42);}
 
@@ -55,7 +61,7 @@ body{
 
 /* OPEN SCREEN */
 .hero-wrap{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:8px;}
-.curved-svg{width:min(280px,75vw);margin-bottom:-4px;}
+.curved-svg{width:min(320px,88vw);margin-bottom:-10px;}
 .pman-hero{display:block;width:min(210px,56vw);animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 18px 28px rgba(110,68,204,.55));}
 .open-title{font-family:'Prompt',sans-serif;font-size:clamp(16px,4.3vw,21px);font-weight:700;text-align:center;margin:0 0 4px;color:#fff;text-shadow:0 0 20px rgba(244,194,76,.4);}
 .open-sub{font-size:14px;text-align:center;color:var(--lavender);margin:0 0 16px;line-height:1.7;}
@@ -155,12 +161,12 @@ body{
   <section id="screen-open" class="screen">
     <div class="hero-wrap">
       <!-- Curved text above P'Man -->
-      <svg class="curved-svg" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+      <svg class="curved-svg" viewBox="0 0 320 95" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <path id="arc" d="M 18,55 Q 140,-8 262,55"/>
-          <filter id="glow-f"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <path id="arc" d="M 6,88 Q 160,-8 314,88"/>
+          <filter id="glow-f"><feGaussianBlur stdDeviation="3.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-        <text font-family="Prompt,sans-serif" font-size="18" font-weight="700" fill="#F4C24C" text-anchor="middle" filter="url(#glow-f)">
+        <text font-family="Prompt,sans-serif" font-size="30" font-weight="800" fill="#F4C24C" text-anchor="middle" filter="url(#glow-f)">
           <textPath href="#arc" startOffset="50%">✨ ปรุงยาหาคณะที่ใช่ ✨</textPath>
         </text>
       </svg>
@@ -322,24 +328,55 @@ const FACULTY={
 
 /* ===== QUESTIONS ===== */
 const QS=[
-  {q:"เริ่มต้นปรุงยา คุณหยิบผงวิเศษชนิดไหนใส่ลงไปก่อน?",
-   o:[["ผงแห่งจินตนาการ ระยิบระยับเป็นประกาย 🌈",2],["ผงแห่งเหตุผล หนักแน่นเป็นเหลี่ยมคม 💎",3],["ผงแห่งความเมตตา อุ่นนุ่มสีชมพู 💞",5],["ผงแห่งตัวเลข เรียงเป็นแถวเป๊ะๆ 🔢",6]]},
-  {q:"พี่แมนยื่นใบไม้วิเศษมาให้เลือก ใบไหนเรียกคุณ?",
-   o:[["ใบแห่งการสร้างสรรค์ 🎨",2],["ใบแห่งการวิเคราะห์ 🔍",1],["ใบแห่งการช่วยเหลือผู้อื่น 💚",5],["ใบแห่งการเป็นผู้นำ 👑",3]]},
-  {q:"เลือกสัตว์เวทมนตร์มาช่วยคนยาให้คุณ",
-   o:[["🦉 นกฮูกแห่งปัญญา",1],["🐱 แมวดำผู้ช่างสังเกต",2],["🦊 จิ้งจอกนักโต้แย้ง",3],["🐉 มังกรจิ๋วผู้รักการทดลอง",4]]},
-  {q:"ทันใดนั้นน้ำยาก็เดือดพล่านขึ้นมา! คุณจะ...",
-   o:[["หยิบสมุดมาจดสาเหตุอย่างใจเย็น 📝",4],["ลองผสมอะไรใหม่ๆ ดู เผื่อจะเจอสูตรเด็ด 🎲",2],["คำนวณก่อนว่าคุ้มไหมถ้าทำต่อ 📐",6],["ตั้งสติ คอยดูแลไม่ให้ใครเจ็บตัว 🛡️",5]]},
-  {q:"เวลาพี่แมนยกตำราเล่มหนามาอธิบาย คุณอยาก...",
-   o:[["ฟังเรื่องราวเบื้องหลังตำราเล่มนี้ 📖",1],["แปลงมันให้เป็นภาพหรือผังเข้าใจง่าย 🗺️",2],["ถกเถียงว่าทำไมต้องเป็นแบบนั้น 🗣️",3],["ลองทำตามทันทีเพื่อดูผลจริง ⚗️",4]]},
-  {q:"ถ้าเมือง moresheet จัดเทศกาลประจำปี คุณอยากรับหน้าที่...",
-   o:[["เขียนเรื่องราวเปิดงานให้ทุกคนประทับใจ ✍️",1],["ออกแบบเวทีให้สวยปังที่สุด 🎭",2],["ดูแลกฎระเบียบให้งานราบรื่นยุติธรรม ⚖️",3],["วางแผนงบประมาณและรายได้ของงาน 💰",6]]},
-  {q:"พี่แมนยื่นของขวัญลึกลับสองชิ้นให้เลือก",
-   o:[["สมุดบันทึกเปล่า ให้เขียนเรื่องราวในแบบของคุณ 📒",1],["กล่องสีกับพู่กันวิเศษ 🎨",2]]},
-  {q:"ในเมืองเวทมนตร์ คุณอยากถือสิ่งนี้ติดตัว",
-   o:[["ป้ายผู้พิทักษ์กฎแห่งเมือง 🏛️",3],["ลูกคิดทองคำ คำนวณทรัพย์สมบัติ 🧮",6]]},
-  {q:"สุดท้าย พี่แมนยื่นไอเทมชิ้นสุดท้ายให้เลือก",
-   o:[["แว่นขยายตรวจสอบทุกสูตรอย่างละเอียด 🔬",4],["ไม้กายสิทธิ์รักษาผู้คนในเมือง 🪄",5]]}
+  /* Q1 — Core interest · F1 F2 F4 F6 · ไม่มีอิโมจิ */
+  {q:"🧪 เริ่มปรุงยา! เลือกผงวิเศษที่ดึงดูดใจคุณมากที่สุด",
+   o:[["ผงทรานสเลชั่นรู้ภาษาทั่วโลก",1],
+      ["ผงมิราเคิลสร้างโลกแห่งตัวตน",2],
+      ["ผงเนรมิตอาณาจักรรอบทิศ",4],
+      ["ผงพี่เสกทุกอย่างเป็นไปได้",6]]},
+  /* Q2 — Core motivation · F2 F3 F4 F5 · ไม่มีอิโมจิ */
+  {q:"🌿 เลือกใบไม้วิเศษที่ตรงกับแรงขับเคลื่อนในใจคุณ",
+   o:[["ใบแห่งการสร้างสรรค์",2],
+      ["ใบแห่งความยุติธรรม",3],
+      ["ใบแห่งการค้นพบ",4],
+      ["ใบแห่งการเยียวยา",5]]},
+  /* Q3 — Archetype / thinking style · F1 F3 F4 F5 */
+  {q:"🦄 เลือกสัตว์เวทมนตร์ที่บุคลิกตรงกับคุณมากที่สุด",
+   o:[["🦉 นกฮูก",1],
+      ["🦊 จิ้งจอก",3],
+      ["🐉 มังกร",4],
+      ["🦌 กวางวิเศษ",5]]},
+  /* Q4 — Crisis response · F1 F2 F5 F6 */
+  {q:"💥 น้ำยาเดือดพล่านกะทันหัน! คุณตอบสนองอย่างไร?",
+   o:[["🔍 นิ่งสงบ ค้นหาบริบทและสาเหตุที่แท้จริงก่อนลงมือ",1],
+      ["💡 มองหาวิธีแก้ปัญหาแบบใหม่ที่ยังไม่เคยลองมาก่อน",2],
+      ["🤝 รีบตรวจสอบว่ามีใครได้รับผลกระทบและต้องการความช่วยเหลือ",5],
+      ["📐 คำนวณความเสี่ยงและผลกระทบทุกด้านก่อนตัดสินใจ",6]]},
+  /* Q5 — Learning style (VARK + Kolb) · F1 F3 F4 F6 */
+  {q:"📚 เลือกตำราที่ตรงกับวิธีเรียนรู้ของคุณมากที่สุด",
+   o:[["📖 ตำราเล่าเรื่อง",1],
+      ["🗣️ ตำราถกเถียง",3],
+      ["⚗️ ตำราทดลอง",4],
+      ["📊 ตำราตาราง",6]]},
+  /* Q6 — Preferred social role · F2 F3 F5 F6 · ไม่มีอิโมจิ */
+  {q:"🎪 เมือง moresheet จัดเทศกาลใหญ่! คุณอยากรับตำแหน่งไหน?",
+   o:[["หัวหน้าฝ่ายสื่อสาร ออกแบบ และสร้างบรรยากาศให้งาน",2],
+      ["หัวหน้าฝ่ายกฎระเบียบและความยุติธรรมของงาน",3],
+      ["หัวหน้าฝ่ายดูแลสุขภาพและสวัสดิการผู้เข้าร่วม",5],
+      ["หัวหน้าฝ่ายบริหารงบประมาณและวางแผนรายได้ทั้งหมด",6]]},
+  /* Q7 — Fine-tune F1 vs F2 vs F5 · ไม่มีอิโมจิ ไม่มีคำอธิบาย */
+  {q:"🎁 พี่แมนยื่นของขวัญให้เลือก คุณเลือก...",
+   o:[["สมุดบันทึก",1],
+      ["กล้องและไมโครโฟน",2],
+      ["เครื่องวัดความดัน",5]]},
+  /* Q8 — Fine-tune F3 vs F6 · ไม่มีอิโมจิ ไม่มีคำอธิบาย */
+  {q:"⚔️ เลือกอาวุธประจำตัวสำหรับการเดินทางในดินแดนเวทมนตร์",
+   o:[["ตาชั่งแห่งความยุติธรรม",3],
+      ["ลูกคิดทองคำ",6]]},
+  /* Q9 — Fine-tune F4 vs F5 */
+  {q:"✨ ไอเทมสุดท้ายที่คุณต้องการพกติดตัวในการผจญภัย",
+   o:[["🗺️ แผนที่ไดนามิกแสดงทุกปัญหาพร้อมเส้นทางแก้ไข",4],
+      ["🪄 ไม้กายสิทธิ์รักษาทุกโรค",5]]}
 ];
 
 /* ===== STATE ===== */
@@ -383,6 +420,7 @@ function prevQ(){
 
 function doTwist(){
   goScreen('twist');
+  playRevealSound(); // suspense music as result builds up
   const ol=document.getElementById('twistOverlay');
   setTimeout(()=>{ol.classList.add('show');document.getElementById('twist2').style.opacity='1';},700);
   setTimeout(()=>{ol.classList.remove('show');setTimeout(showResult,200);},2800);
@@ -392,7 +430,12 @@ function showResult(){
   let best=1,top=-1;
   for(let k=1;k<=6;k++){if(scores[k]>top){top=scores[k];best=k;}}
   const f=FACULTY[best];
-  document.getElementById('resultMascotImg').src=MASCOTS[best];
+  const mImg=document.getElementById('resultMascotImg');
+  mImg.src=MASCOTS[best];
+  // F2 (Arts) → สีชมพูกะปิ via hue-rotate: orange(~25°)+305°=330° (mauve-pink)
+  mImg.style.filter = best===2
+    ? 'drop-shadow(0 8px 18px rgba(110,68,204,.5)) hue-rotate(305deg) saturate(0.82) brightness(1.08)'
+    : 'drop-shadow(0 8px 18px rgba(110,68,204,.5))';
   document.getElementById('rTitle').textContent=f.tag;
   document.getElementById('rFaculty').textContent='🎓 '+f.name;
   document.getElementById('rDesc').textContent=f.desc;
@@ -414,16 +457,37 @@ function shareToStory(){
   trackStoryShare();
   showToast('⏳ กำลังสร้างรูป...',1800);
   const card=document.getElementById('resultCard');
-  html2canvas(card,{backgroundColor:'#160d3a',scale:2,useCORS:true,logging:false,allowTaint:true}).then(canvas=>{
-    canvas.toBlob(blob=>{
-      const file=new File([blob],'moresheet-result.png',{type:'image/png'});
-      if(navigator.canShare&&navigator.canShare({files:[file]})){
-        navigator.share({files:[file],title:'คณะที่ใช่ของฉัน!'}).then(()=>{
-          showToast('✅ แชร์สำเร็จ!');
-        }).catch(err=>{ if(err.name!=='AbortError') fallbackStory(canvas); });
-      } else { fallbackStory(canvas); }
-    },'image/png');
-  }).catch(()=>fallbackStory(null));
+  const mascotImg=document.getElementById('resultMascotImg');
+  // Freeze float animation so mascot is fully visible from the top
+  const prevAnim=mascotImg.style.animation;
+  mascotImg.style.animation='none';
+  mascotImg.style.transform='translateY(0)';
+  card.style.overflow='visible';
+  setTimeout(()=>{
+    html2canvas(card,{
+      backgroundColor:'#160d3a',scale:2,
+      useCORS:true,logging:false,allowTaint:true,
+      scrollX:0,scrollY:0,
+      y:0,x:0
+    }).then(canvas=>{
+      mascotImg.style.animation=prevAnim||'float 3.5s ease-in-out infinite';
+      mascotImg.style.transform='';
+      card.style.overflow='';
+      canvas.toBlob(blob=>{
+        const file=new File([blob],'moresheet-result.png',{type:'image/png'});
+        if(navigator.canShare&&navigator.canShare({files:[file]})){
+          navigator.share({files:[file],title:'คณะที่ใช่ของฉัน!'}).then(()=>{
+            showToast('✅ แชร์สำเร็จ!');
+          }).catch(err=>{ if(err.name!=='AbortError') fallbackStory(canvas); });
+        } else { fallbackStory(canvas); }
+      },'image/png');
+    }).catch(()=>{
+      mascotImg.style.animation=prevAnim||'';
+      mascotImg.style.transform='';
+      card.style.overflow='';
+      fallbackStory(null);
+    });
+  },180);
 }
 function fallbackStory(canvas){
   if(canvas){
@@ -562,6 +626,52 @@ function playBubble(){
     lg.gain.setValueAtTime(0,now);lg.gain.linearRampToValueAtTime(0.25,now+0.03);
     lg.gain.exponentialRampToValueAtTime(0.001,now+0.22);
     lo.connect(lg);lg.connect(masterGain);lo.start(now);lo.stop(now+0.25);
+  }catch(e){}
+}
+/* ===== REVEAL SUSPENSE SOUND ===== */
+function playRevealSound(){
+  try{
+    initAudio();
+    if(!audioCtx) return;
+    const now=audioCtx.currentTime;
+    // Rising glissando sweep (tension build)
+    const sw=audioCtx.createOscillator(),swg=audioCtx.createGain();
+    sw.type='sine'; sw.frequency.setValueAtTime(160,now);
+    sw.frequency.exponentialRampToValueAtTime(1400,now+2.2);
+    swg.gain.setValueAtTime(0,now);
+    swg.gain.linearRampToValueAtTime(0.13,now+0.4);
+    swg.gain.linearRampToValueAtTime(0.22,now+1.8);
+    swg.gain.exponentialRampToValueAtTime(0.001,now+2.5);
+    sw.connect(swg); swg.connect(masterGain); sw.start(now); sw.stop(now+2.6);
+    // Shimmering sparkle arpeggio
+    const sparks=[392,494,587,740,880,1047,1319,1568];
+    sparks.forEach((f,i)=>{
+      const t=now+0.6+i*0.17;
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.14,t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+      o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+0.4);
+    });
+    // Big reveal chord burst
+    [523,659,784,1047,1319].forEach((f,i)=>{
+      const t=now+2.1+i*0.04;
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.18,t+0.06);
+      g.gain.exponentialRampToValueAtTime(0.001,t+1.0);
+      o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+1.1);
+    });
+    // Deep bass thud for impact
+    const lo=audioCtx.createOscillator(),lg=audioCtx.createGain();
+    lo.type='sine'; lo.frequency.setValueAtTime(90,now+2.0);
+    lo.frequency.exponentialRampToValueAtTime(40,now+2.5);
+    lg.gain.setValueAtTime(0,now+2.0);
+    lg.gain.linearRampToValueAtTime(0.28,now+2.06);
+    lg.gain.exponentialRampToValueAtTime(0.001,now+2.6);
+    lo.connect(lg); lg.connect(masterGain); lo.start(now+2.0); lo.stop(now+2.7);
   }catch(e){}
 }
 
